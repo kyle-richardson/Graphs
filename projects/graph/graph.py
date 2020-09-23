@@ -3,9 +3,39 @@ Simple graph implementation
 """
 from util import Stack, Queue  # These may come in handy
 
+
+class Vertex:
+    def __init__(self, value, color="white", neighbors=[]):
+        self.value = value
+        self.color = color
+        self.neighbors = neighbors
+
+    def add_neighbor(self, vert):
+        self.neighbors.append(vert)
+
+    def get_neighbors(self):
+        return self.neighbors
+
+    def get_color(self):
+        return self.color
+
+    def set_color(self, col):
+        self.color = col
+
+    def get_value(self):
+        return self.value
+
+    def set_value(self, val):
+        self.value = val
+
+    def __repr__(self):
+        return str(self.get_neighbors())
+
+
 class Graph:
 
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
+
     def __init__(self):
         self.vertices = {}
 
@@ -13,26 +43,41 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        pass  # TODO
+        vert = Vertex(vertex_id)
+        self.vertices[vertex_id] = vert
 
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
-        pass  # TODO
+        self.vertices[v1].add_neighbor(self.vertices[v2])
 
     def get_neighbors(self, vertex_id):
         """
         Get all neighbors (edges) of a vertex.
         """
-        pass  # TODO
+        just_values = [x.get_value() for x in self.vertices]
+        return just_values
 
-    def bft(self, starting_vertex):
+    def bft(self, starting_vertex_value):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        startVert = self.vertices[starting_vertex_value]
+        startVert.set_color("gray")
+        q = Queue()
+        q.enqueue(startVert)
+
+        while not q.isEmpty():
+            u = q.queue[0]
+            for v in u.get_neighbors():
+                if v.get_color() == "white":
+                    v.set_color("gray")
+                    q.enqueue(v)
+
+            print(q.dequeue().get_value())
+            u.set_color("black")
 
     def dft(self, starting_vertex):
         """
@@ -75,6 +120,7 @@ class Graph:
         This should be done using recursion.
         """
         pass  # TODO
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
